@@ -25,10 +25,10 @@
 	};
 
 	/*
-	 * Vendor GPIO numbers in brackets. All keys read high when released.
-	 * Several keys sit on different pads than on the Mini (A/Y, L/L2 and
-	 * R/R2 are swapped, power is on SAR0) - still to be confirmed by
-	 * pressing each key on hardware.
+	 * Vendor GPIO numbers in the comments. Every key was pressed on a
+	 * real unit while its pad level was read: all are active low, and
+	 * only the volume keys (TTL23/TTL24) and the power key (SAR0) differ
+	 * from the Mini.
 	 */
 	gpio-keys {
 		compatible = "gpio-keys-polled";
@@ -58,9 +58,9 @@
 			linux,code = <106>; /* KEY_RIGHT */
 		};
 
-		key_a {		/* 8 */
+		key_a {		/* 7 */
 			label = "key_a";
-			gpios = <&gpio SSD20XD_GPIO_GPIO8 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio SSD20XD_GPIO_GPIO7 GPIO_ACTIVE_LOW>;
 			linux,code = <30>; /* KEY_A */
 		};
 
@@ -70,9 +70,9 @@
 			linux,code = <48>; /* KEY_B */
 		};
 
-		key_y {		/* 7 */
+		key_y {		/* 8 */
 			label = "key_y";
-			gpios = <&gpio SSD20XD_GPIO_GPIO7 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio SSD20XD_GPIO_GPIO8 GPIO_ACTIVE_LOW>;
 			linux,code = <21>; /* KEY_Y */
 		};
 
@@ -100,27 +100,27 @@
 			linux,code = <139>; /* KEY_MENU */
 		};
 
-		key_l {		/* 13 */
+		key_l {		/* 14 */
 			label = "key_l";
-			gpios = <&gpio SSD20XD_GPIO_GPIO13 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio SSD20XD_GPIO_GPIO14 GPIO_ACTIVE_LOW>;
 			linux,code = <16>; /* KEY_Q */
 		};
 
-		key_l2 {	/* 14 */
+		key_l2 {	/* 13 */
 			label = "key_l2";
-			gpios = <&gpio SSD20XD_GPIO_GPIO14 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio SSD20XD_GPIO_GPIO13 GPIO_ACTIVE_LOW>;
 			linux,code = <17>; /* KEY_W */
 		};
 
-		key_r {		/* 90 */
+		key_r {		/* 47 */
 			label = "key_r";
-			gpios = <&gpio SSD20XD_GPIO_GPIO90 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio SSD20XD_GPIO_UART0_RX GPIO_ACTIVE_LOW>;
 			linux,code = <18>; /* KEY_E */
 		};
 
-		key_r2 {	/* 47 */
+		key_r2 {	/* 90 */
 			label = "key_r2";
-			gpios = <&gpio SSD20XD_GPIO_UART0_RX GPIO_ACTIVE_LOW>;
+			gpios = <&gpio SSD20XD_GPIO_GPIO90 GPIO_ACTIVE_LOW>;
 			linux,code = <19>; /* KEY_R */
 		};
 
