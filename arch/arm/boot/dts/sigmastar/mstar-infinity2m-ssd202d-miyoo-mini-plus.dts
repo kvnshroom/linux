@@ -239,9 +239,10 @@
 
 	/*
 	 * Battery, charger and power rails. Its interrupt line is not known,
-	 * so only the parts that work without it are enabled. There is
-	 * deliberately no regulators node: Linux must not switch off rails
-	 * the vendor u-boot set up.
+	 * so only the parts that work without it are enabled. Only rails we
+	 * have identified are described: the regulator core leaves rails
+	 * without a node alone, so Linux cannot switch off something the
+	 * vendor u-boot set up.
 	 */
 	pmic: pmic@34 {
 		compatible = "x-powers,axp223";
@@ -259,6 +260,28 @@
 
 		battery_power_supply: battery-power {
 			compatible = "x-powers,axp221-battery-power-supply";
+		};
+
+		regulators {
+			/*
+			 * Wi-Fi module power: Onion's Wi-Fi switch toggles
+			 * exactly these two outputs (both 3.3 V) and the USB
+			 * device disappears with them. Kept on for now; an
+			 * rfkill-style switch can come later.
+			 */
+			reg_wifi_a: dldo1 {
+				regulator-name = "vcc-wifi-a";
+				regulator-min-microvolt = <3300000>;
+				regulator-max-microvolt = <3300000>;
+				regulator-always-on;
+			};
+
+			reg_wifi_b: dldo2 {
+				regulator-name = "vcc-wifi-b";
+				regulator-min-microvolt = <3300000>;
+				regulator-max-microvolt = <3300000>;
+				regulator-always-on;
+			};
 		};
 	};
 
@@ -330,6 +353,15 @@
 			};
 		};
         };
+};
+
+/* USB port 1 carries the RTL8188FU Wi-Fi module (0bda:f179) */
+&usbphy1 {
+	status = "okay";
+};
+
+&uhc1 {
+	status = "okay";
 };
 
 /* On-chip BACH audio (codec + I2S), for the speaker/headphone output. */
