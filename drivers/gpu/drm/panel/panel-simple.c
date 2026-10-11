@@ -4813,6 +4813,43 @@ static const struct panel_desc_dsi samsung_lms279cc01 = {
 	.lanes = 2,	/* the Miyoo panel is wired 2-lane, as the vendor u-boot drives it */
 };
 
+static const struct drm_display_mode miyoo_mini_plus_panel_mode = {
+	/*
+	 * Sitronix ST7703 based 3.5" 640x480 panel. The vendor u-boot resets
+	 * and initialises it and leaves the DSI link running, like on the
+	 * Miyoo Mini, so this has to be exactly u-boot's timing:
+	 * H(hfp 98, hsw 20, hbp 22) V(vfp 17, vsw 5, vbp 13) at 60 Hz, so
+	 * htotal=780, vtotal=515 and 780 * 515 * 60 = 24.102 MHz.
+	 */
+	.clock = 24102,
+	.hdisplay = 640,
+	.hsync_start = 640 + 98,
+	.hsync_end = 640 + 98 + 20,
+	.htotal = 640 + 98 + 20 + 22,	/* 780 */
+	.vdisplay = 480,
+	.vsync_start = 480 + 17,
+	.vsync_end = 480 + 17 + 5,
+	.vtotal = 480 + 17 + 5 + 13,	/* 515 */
+	.flags = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
+};
+
+static const struct panel_desc_dsi miyoo_mini_plus_panel = {
+	.desc = {
+		.modes = &miyoo_mini_plus_panel_mode,
+		.num_modes = 1,
+		.bpc = 8,
+		.size = {
+			.width = 71,
+			.height = 53,
+		},
+		.connector_type = DRM_MODE_CONNECTOR_DSI,
+	},
+	/* 2 lanes, non-burst with sync pulses, as the vendor kernel reports */
+	.flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULSE,
+	.format = MIPI_DSI_FMT_RGB888,
+	.lanes = 2,
+};
+
 static const struct of_device_id dsi_of_match[] = {
 	{
 		.compatible = "auo,b080uan01",
@@ -4838,6 +4875,10 @@ static const struct of_device_id dsi_of_match[] = {
 	}, {
 		.compatible = "samsung,lms279cc01",
 		.data = &samsung_lms279cc01
+	},
+	{
+		.compatible = "miyoo,mini-plus-panel",
+		.data = &miyoo_mini_plus_panel
 	},
 	{
 		/* sentinel */
